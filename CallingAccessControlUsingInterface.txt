@@ -1,0 +1,56 @@
+ //SPDX-License-Identifier: MIT
+
+pragma solidity >0.8.0;
+ 
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.7.0/contracts/access/IAccessControl.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/math/SafeMath.sol";
+
+contract AccessControlInterfaceUse is ERC20{
+    IAccessControl public AccessControlContract;
+using SafeMath for uint256;
+    constructor(IAccessControl _AccessControlContract) ERC20 ("STANDARDTOKEN","ST"){
+        AccessControlContract=_AccessControlContract;
+        
+    }
+
+    // function transfer(address to, uint256 amount) public virtual override returns (bool) {
+        
+    //     if (!AccessControlContract.hasRole(keccak256("ADMIN_ROLE"),0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2)){
+    //         uint fee=5;
+    //         uint adminAmount= amount*(fee)/100;
+            
+
+    //         _transfer(msg.sender, 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2, adminAmount );
+    //         _transfer(msg.sender, to, amount.sub(adminAmount) );
+    //         }
+    //         else{
+    //              _transfer(msg.sender, to, amount  );
+    //         }
+    //     return true;
+    // }
+    function checkingTransfer(address to, uint256 amount) public {
+        
+        if (!AccessControlContract.hasRole(keccak256("ADMIN_ROLE"),msg.sender)){
+            uint fee=5;
+            uint adminAmount= amount*(fee)/100;
+            
+
+            _transfer(msg.sender, 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2, adminAmount );
+            _transfer(msg.sender, to, amount.sub(adminAmount) );
+            }
+            else{
+                 _transfer(msg.sender, to, amount  );
+            }
+    }
+
+    function mintTOkens(uint256 amount) public {
+        _mint(msg.sender,amount);
+    }
+ 
+}
+
+
+//  0xD7ACd2a9FD159E69Bb102A1ca21C9a3e3A5F771B
+
+//  deployed acces control
